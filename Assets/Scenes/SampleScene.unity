@@ -445,6 +445,7 @@ MonoBehaviour:
   muzzleEffect: {fileID: 2099368767}
   impactEffect: {fileID: 100002, guid: 3b1513bcb86426b4795879be6a128ed7, type: 3}
   muzzleLight: {fileID: 655899628}
+  centreSight: {fileID: 426561728}
   fpsCam: {fileID: 963194227}
   isOutOfAmmo: 0
   isClicking: 0
@@ -7180,6 +7181,7 @@ MonoBehaviour:
   muzzleEffect: {fileID: 468555052}
   impactEffect: {fileID: 100002, guid: 3b1513bcb86426b4795879be6a128ed7, type: 3}
   muzzleLight: {fileID: 655899628}
+  centreSight: {fileID: 426561728}
   fpsCam: {fileID: 963194227}
   isOutOfAmmo: 0
   isClicking: 0
