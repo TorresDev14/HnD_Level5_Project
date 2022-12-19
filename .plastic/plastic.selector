@@ -1,4 +1,0 @@
-repository "Gateshead College HnD Level 4 Project@GatesheadCollegeHnDLevel5Project@cloud"
-  path "/"
-    br "/main"
-    co "/main"

@@ -21,6 +21,7 @@ public class WeaponsScript : WeaponAnimation
 
     public GameObject impactEffect;
     public GameObject muzzleLight;
+    public GameObject centreSight;
 
     public Camera fpsCam;
 
@@ -53,6 +54,7 @@ public class WeaponsScript : WeaponAnimation
         muzzleLight.SetActive(false);
         isOutOfAmmo = false;
         currentAmmo = magSize;
+        centreSight.SetActive(true);
 
         recoilScriptgun = GameObject.Find("Main Camera").GetComponent<RecoilScript>();
         //recoilScriptGun = GameObject.Find("AK47Hand").GetComponent<RecoilSystem2>();
@@ -134,10 +136,12 @@ public class WeaponsScript : WeaponAnimation
         if (Input.GetButton("Reload") && currentAmmo <= (magSize - 1) && pocketAmmo > 0)
         {
             isReloading = !isReloading;
-            animator1.SetBool("IsReloading", true);
+            animator1.SetBool("IsReloading", isReloading);
             pocketAmmo = pocketAmmo - (magSize - currentAmmo);
             currentAmmo = currentAmmo + (magSize - currentAmmo);
             reloading.Play();
+
+            centreSight.SetActive(false);
 
             if (pocketAmmo < 1)
             {
@@ -149,6 +153,7 @@ public class WeaponsScript : WeaponAnimation
         { 
             animator1.SetBool("IsReloading", false);
             isReloading = false;
+            centreSight.SetActive(true);
         }
 
         if (currentAmmo == 0)
