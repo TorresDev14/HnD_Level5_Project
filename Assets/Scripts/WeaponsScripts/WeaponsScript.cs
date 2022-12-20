@@ -16,7 +16,7 @@ public class WeaponsScript : WeaponAnimation
     public int currentAmmo; // the ammo we have at the moment into the mag
     public int pocketAmmo; //pocketAmmoM4; // all amount of bullets for each weapon
     public float reloadTime = 1f; // to reload the weapon
-    //public bool isReloading = false;    
+                                  //public bool isReloading = false;
 
     public ParticleSystem muzzleEffect;
 
@@ -25,7 +25,6 @@ public class WeaponsScript : WeaponAnimation
     public GameObject centreSight;
 
     public Camera fpsCam;
-
 
     public bool isOutOfAmmo;
     public bool isClicking = false;
@@ -73,12 +72,9 @@ public class WeaponsScript : WeaponAnimation
         {
             isAiming = !isAiming;
             animator1.SetBool("IsAiming", true);
-            
-            if (isAiming == true)
-            {
-                isRunning = false;
-                animator1.SetBool("IsRunning", false);
-            }
+
+            isRunning = false;
+            animator1.SetBool("IsRunning", false);
         }
         else if (Input.GetButtonUp("Fire2"))
         {
@@ -90,8 +86,10 @@ public class WeaponsScript : WeaponAnimation
         {
             isRunning = !isRunning;
             animator1.SetBool("IsRunning", true);
-        }
 
+            isAiming = false;
+            animator1.SetBool("IsAiming", false);
+        }
         else if (Input.GetButtonUp("Run"))
         {
             isRunning = false;
@@ -103,7 +101,6 @@ public class WeaponsScript : WeaponAnimation
             isSlow = !isSlow;
             animator1.SetBool("IsSlow", true);
         }
-
         else if (Input.GetButtonUp("Crouch"))
         {
             isSlow = false;
@@ -121,21 +118,11 @@ public class WeaponsScript : WeaponAnimation
             animator1.SetBool("IsWatching", false);
         }
 
-        if (currentAmmo == 0)
-        {
-            isOutOfAmmo = true;
-            if (Input.GetButtonDown("Fire1"))
-            {
-                isClicking = true;
-                outOfAmmo.Play();
-            }
-            return;
-        }
-        else
-            isOutOfAmmo = false;
-
         if (Input.GetButtonDown("Reload") && currentAmmo <= (magSize - 1) && pocketAmmo > 0)
         {
+            isAiming = false;
+            animator1.SetBool("IsAiming", false);
+
             isReloading = !isReloading;
             animator1.SetBool("IsReloading", true);
             pocketAmmo = pocketAmmo - (magSize - currentAmmo);
@@ -151,13 +138,48 @@ public class WeaponsScript : WeaponAnimation
             }
         }
         else if (Input.GetButtonUp("Reload"))
-        { 
+        {
             animator1.SetBool("IsReloading", false);
             isReloading = false;
             centreSight.SetActive(true);
         }
 
-                 
+        if (currentAmmo == 0)
+        {
+            isOutOfAmmo = true;
+            if (Input.GetButtonDown("Fire1"))
+            {
+                isClicking = true;
+                outOfAmmo.Play();
+            }
+            return;
+        }
+        else
+            isOutOfAmmo = false;
+
+        if (Input.GetButtonDown("TiltLeft"))
+        {
+            isTiltLeft = !isTiltLeft;
+            animator1.SetBool("IsTiltLeft", true);
+        }
+        else if (Input.GetButtonUp("TiltLeft"))
+        {
+            isTiltLeft = false;
+            animator1.SetBool("IsTiltLeft", false);
+        }
+
+        if (Input.GetButtonDown("TiltRight"))
+        {
+            isTiltRight = !isTiltRight;
+            animator1.SetBool("IsTiltRight", true);
+        }
+        else if (Input.GetButtonUp("TiltRight"))
+        {
+            isTiltRight = false;
+            animator1.SetBool("IsTiltRight", false);
+        }
+
+
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && !isReloading) //  to make the the weapon fire while pressing, need to remove the "Down" word from "GetButtonDown" in IF statment
         {
             weaponSoundEffect.Play();
@@ -169,6 +191,7 @@ public class WeaponsScript : WeaponAnimation
         else
             muzzleLight.SetActive(false);
     }
+
 
     IEnumerator ReloadAmmo()
     {
@@ -191,7 +214,7 @@ public class WeaponsScript : WeaponAnimation
 
             Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal)); // to make the impact effect of the bullet in the objects or enemies
         }
-
+        
         recoilScriptgun.RecoilFire();
     }
 

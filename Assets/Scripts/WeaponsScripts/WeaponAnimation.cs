@@ -14,6 +14,8 @@ public class WeaponAnimation : MonoBehaviour
     public bool isOpening = false;
     public bool isWatching = false;
     public bool onTheGround;
+    public bool isTiltLeft = false;
+    public bool isTiltRight = false;
 
     /*[Header("Camera View Sniper")]
     public GameObject weaponCamera;*/
