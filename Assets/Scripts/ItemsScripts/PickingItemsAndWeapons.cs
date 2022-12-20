@@ -47,16 +47,7 @@ public class PickingItemsAndWeapons : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*if (Input.GetButtonDown("Crouch"))
-        {
-            isCrouching = !isCrouching;
-            cameraAnimation.SetBool("IsSlow", true);
-        }
-        else if (Input.GetButtonUp("Crouch"))
-        {
-            isCrouching = false;
-            cameraAnimation.SetBool("IsSlow", false);
-        }*/
+       
     }
 
 
@@ -91,27 +82,24 @@ public class PickingItemsAndWeapons : MonoBehaviour
             aK47Floor.SetActive(true);
             aK47InFloor.Equals(true);
         }
+    }
 
+    private void OnTriggerEnter(Collider collision)
+    {
         if (collision.gameObject.tag == "AK47Bullets")
         {
             GameObject.FindGameObjectWithTag("AK47").GetComponent<WeaponsScript>().pocketAmmo += 20;
             bulletsCollected.Play();
             Destroy(aK47Ammo.gameObject);
         }
+        else return;
 
         if (collision.gameObject.tag == "M4A1Bullets")
         {
             GameObject.FindGameObjectWithTag("M4A1").GetComponent<WeaponsScript>().pocketAmmo += 40;
             bulletsCollected.Play();
             Destroy(m4A1Ammo.gameObject);
-
-            return;
         }
-
-        /*if (collision.gameObject.tag == "M4A1Bullets")
-        {
-            GameObject.FindGameObjectWithTag("M4A1").GetComponent<WeaponsScript>().pocketAmmoM4 += 20;
-            Destroy(m4A1Ammo.gameObject);
-        }*/
+        else return;
     }
 }

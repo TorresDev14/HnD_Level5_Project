@@ -10,6 +10,7 @@ public class WeaponsScript : WeaponAnimation
     public float damage = 10f; // the amount of damage the bullet will take
     public float range = 100f; // the amount of distance can the bullet hit the enemy or objects
     public float fireRate = 15f; // set up the fire rate of the weapon
+    public float nextTimeToFire = 0f;
 
     public int magSize = 32; // set up the max ammo for the mag, make it public so we can edit as we want
     public int currentAmmo; // the ammo we have at the moment into the mag
@@ -29,7 +30,6 @@ public class WeaponsScript : WeaponAnimation
     public bool isOutOfAmmo;
     public bool isClicking = false;
 
-    //public int bulletsInMag;
     [Header ("UI")]
     public TextMeshProUGUI bulletsCounter;
 
@@ -40,12 +40,10 @@ public class WeaponsScript : WeaponAnimation
     public AudioSource emptyPocket;
 
 
-    //public GameObject bullets10;// bullets30, bullets50;
+    //public GameObject bullets10, bullets30, bullets50;
 
-    public float nextTimeToFire = 0f;
 
     private RecoilScript recoilScriptgun,recoilscriptcam;
-    //public RecoilSystem2 recoilScriptGun, recoilScriptCam;
 
 
     private void Start()
@@ -57,7 +55,6 @@ public class WeaponsScript : WeaponAnimation
         centreSight.SetActive(true);
 
         recoilScriptgun = GameObject.Find("Main Camera").GetComponent<RecoilScript>();
-        //recoilScriptGun = GameObject.Find("AK47Hand").GetComponent<RecoilSystem2>();
     }
 
     private void OnEnable()
@@ -127,16 +124,20 @@ public class WeaponsScript : WeaponAnimation
         if (currentAmmo == 0)
         {
             isOutOfAmmo = true;
+            if (Input.GetButtonDown("Fire1"))
+            {
+                isClicking = true;
+                outOfAmmo.Play();
+            }
+            return;
         }
         else
             isOutOfAmmo = false;
 
-
-
-        if (Input.GetButton("Reload") && currentAmmo <= (magSize - 1) && pocketAmmo > 0)
+        if (Input.GetButtonDown("Reload") && currentAmmo <= (magSize - 1) && pocketAmmo > 0)
         {
             isReloading = !isReloading;
-            animator1.SetBool("IsReloading", isReloading);
+            animator1.SetBool("IsReloading", true);
             pocketAmmo = pocketAmmo - (magSize - currentAmmo);
             currentAmmo = currentAmmo + (magSize - currentAmmo);
             reloading.Play();
@@ -156,27 +157,9 @@ public class WeaponsScript : WeaponAnimation
             centreSight.SetActive(true);
         }
 
-        if (currentAmmo == 0)
-        {
-            isOutOfAmmo = true;
-            if (Input.GetButtonDown("Fire1"))
-            {
-                isClicking = true;
-                outOfAmmo.Play();
-            }
-            else if (Input.GetButtonUp("Fire1"))
-            {
-                isClicking = false;
-                outOfAmmo.Stop();
-            }
-            return;
-        }
-
                  
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && !isReloading) //  to make the the weapon fire while pressing, need to remove the "Down" word from "GetButtonDown" in IF statment
         {
-            //recoil2.Recoil();
-            
             weaponSoundEffect.Play();
             muzzleEffect.Play();
             muzzleLight.SetActive(true);
@@ -185,20 +168,16 @@ public class WeaponsScript : WeaponAnimation
         }
         else
             muzzleLight.SetActive(false);
-
     }
 
     IEnumerator ReloadAmmo()
     {
         isReloading = false;
         yield return new WaitForSeconds(reloadTime);
-        //isReloading = false;
     }
 
     public void Shoot()
     {
-        // muzzleFlash.Play();
-
         currentAmmo--;
 
         RaycastHit hit;
@@ -213,7 +192,6 @@ public class WeaponsScript : WeaponAnimation
             Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal)); // to make the impact effect of the bullet in the objects or enemies
         }
 
-        //recoilScriptGun.Recoil();
         recoilScriptgun.RecoilFire();
     }
 
